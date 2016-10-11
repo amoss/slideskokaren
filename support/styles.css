@@ -283,16 +283,8 @@ tr.underrow td {
 }
 
 @font-face {
-    font-family: 'corbertregular';
-    src: url('Corbert-Regular-webfont.eot');
-    src: url('Corbert-Regular-webfont.eot?#iefix') format('embedded-opentype'),
-         url('Corbert-Regular-webfont.woff2') format('woff2'),
-         url('Corbert-Regular-webfont.woff') format('woff'),
-         url('Corbert-Regular-webfont.ttf') format('truetype'),
-         url('Corbert-Regular-webfont.svg#corbertregular') format('svg');
-    font-weight: 400;
-    font-style: normal;
-
+    font-family: 'basic';
+    src: url('Basic-Regular.ttf');
 }
 
 @font-face {
@@ -336,8 +328,9 @@ div.Slogo img {
   padding: 20px;
 }
 div.Stitle h1 {
-  font-family: 'corbertregular';
+  font-family: 'basic';
   font-size: 40px;
+  color: #444444;
   margin: 8px;
   font-weight:400;
 }

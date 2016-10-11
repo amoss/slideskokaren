@@ -138,6 +138,10 @@ with open(args.output, 'wt') as out:
   print >>out, '</div>'
   print >>out, '</body></html>'
 
+style = open('support/logo.svg', 'rt')
+tar   = os.path.join(args.folder, 'logo.svg')
+open(tar,'wt').write(style.read())
+
 if args.forcestyle:
   style = open('support/styles.css', 'rt')
   tar   = os.path.join(args.folder, 'styles.css')
