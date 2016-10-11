@@ -13,3 +13,12 @@ the examples folder is augmented with slides.html and the
 support files necessary. The folder can simply be copied onto
 a server that simply exports part of the file-system (e.g.
 Apache). Examples of use within twisted will follow later.
+
+## Dependencies
+
+The only dependency should be docutils for the RST parser. Install
+using your favourite Python package manager, e.g. `pip install docutils`.
+
+I left the logo out of the distribution ('tis not my copyright to 
+share) - the standard copy is white on transparent, just overwrite the
+support/logo.svg with the correct file.
