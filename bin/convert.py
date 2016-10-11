@@ -104,9 +104,12 @@ def processSlide(slide):
 
     elif isinstance(node, docutils.nodes.image):
       path = os.path.join(args.folder, node.get('uri'))
-      width, height = subprocess.Popen(['identify', '-format', '%w %h', path],
-                                       stdout=subprocess.PIPE).communicate()[0].split(' ')
-      current.addImage(node, aratio=float(width)/float(height))
+      # Temporarily removed the image-magick calls so it is not a dependency at
+      # install time as we do not currently use the aspect ratio for layout.
+      #width, height = subprocess.Popen(['identify', '-format', '%w %h', path],
+      #                                 stdout=subprocess.PIPE).communicate()[0].split(' ')
+      #current.addImage(node, aratio=float(width)/float(height))
+      current.addImage(node, aratio=1.0)
 
     elif isinstance(node, docutils.nodes.topic):
       if isinstance(node.children[0], docutils.nodes.title)  and len(node.children)==2:
