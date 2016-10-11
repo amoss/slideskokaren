@@ -139,12 +139,12 @@ with open(args.output, 'wt') as out:
   print >>out, '</body></html>'
 
 if args.forcestyle:
-  style = open('styles.css', 'rt')
+  style = open('support/styles.css', 'rt')
   tar   = os.path.join(args.folder, 'styles.css')
   open(tar,'wt').write(style.read())
 
 
 if args.forcejs:
-  js = open('slides.js', 'rt')
+  js = open('support/slides.js', 'rt')
   tar   = os.path.join(args.folder, 'slides.js')
   open(tar,'wt').write(js.read())

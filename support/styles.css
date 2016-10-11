@@ -1,0 +1,391 @@
+/*.primary-1 { background-color: #45718D }    Lighter
+.primary-2 { background-color: #44687F }      Normal
+.primary-3 { background-color: #305D7A }      Richer
+.primary-4 { background-color: #8FBCD9 }      Bright
+.primary-5 { background-color: #ADC8D9 }      Bright/faded
+
+.secondary-a-1 { background-color: #DDBD64 }
+.secondary-a-2 { background-color: #C7AE65 }
+.secondary-a-3 { background-color: #BF9F46 }
+.secondary-a-4 { background-color: #F4DD9B }
+.secondary-a-5 { background-color: #F4E6BF }
+
+.secondary-b-1 { background-color: #DD8364 }
+.secondary-b-2 { background-color: #C77E65 }
+.secondary-b-3 { background-color: #BF6546 }
+.secondary-b-4 { background-color: #F4B29B }
+.secondary-b-5 { background-color: #F4CCBF }*/
+
+.greyout {
+  color: #888888;
+}
+.hilight, .hilite {
+  color: #bf9f46;
+}
+
+dt {
+  color: #BF9F46;
+}
+span.pattern {
+  background: #bbbbdd;
+}
+span.sourcetxt {
+  background: #cccccc;
+}
+span.matched {
+  border: 1px solid black;
+  padding: 1px;
+  margin: 1px;
+}
+div.Scallo {
+  background:#ADC8D9;
+  border: 4px solid #8FBCD9;
+  margin: 10px;
+}
+div.ScalloHd {
+  background:#8FBCD9;
+}
+/* Speech bubbles generated using Bubbler by John Clifford - thanks for a cool tool. */
+.bubble
+{
+  position: relative;
+  color: black;
+  /*height: 120px;*/
+  padding: 2px;
+  background: #FFFFCE;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+  border: #d7daa1 solid 4px;
+}
+
+.bubble:after 
+{
+  content: '';
+  position: absolute;
+  border-style: solid;
+  border-width: 0 15px 15px;
+  border-color: #ffffce transparent;
+  display: block;
+  width: 0;
+  z-index: 1;
+  top: -14px;
+  left: 24px;
+}
+
+.bubble:before 
+{
+  content: '';
+  position: absolute;
+  border-style: solid;
+  border-width: 0 20px 20px;
+  border-color: #d7daa1 transparent;
+  display: block;
+  width: 0;
+  z-index: 0;
+  top: -20px;
+  left: 18px;
+}
+.shell {
+  background: #333333;
+  color:      #aaffaa;
+  padding:    0.25em 1em;
+  border-radius: 0.25em;
+  line-height: 1.5;
+  font-family: "Lucida Console", Monaco, monospace;
+  font-size: 24;
+}
+
+.verbatim {
+  background:    white;
+  white-space:   pre;
+  color:         #000000;
+  padding:       5px;
+  border-radius: 10px;
+  border: 2px solid black;
+  font-family:   'Inconsolata';
+  font-size:     28px;
+}
+
+.code {
+  background:    #f4e6bf ;
+  white-space:   pre;
+  color:         #000000;
+  padding:       5px;
+  border-radius: 10px;
+  border: 2px solid #bf9f46;
+  font-family:   'Inconsolata';
+  font-size:     28px;
+}
+
+div.program {
+  display: inline-block;
+}
+
+/* Consolidate various code styles into div.program / div.shell */
+
+code.path {
+  background: #ffdd88;
+  color:      #885533;
+  padding:    0.25em 1em;
+  border-radius: 0.25em;
+  line-height: 2;
+}
+div.known {
+  background: #cccccc;
+  color:      #000000;
+  padding:    0.25em;
+  border-radius: 0.25em;
+  line-height: 2;
+}
+div.anon {
+  background: #ff6666;
+  color:      #ffffff;
+  padding:    0.25em;
+  border-radius: 0.25em;
+  line-height: 2;
+  font-size:  1.75em;
+}
+.right {
+  float : right;
+}
+div.thumb  {
+  width: 1024px;
+  height: 768px;
+  border: 8px solid black;
+  position: absolute;
+  font-size: 32px;
+  bottom: 0px;
+  opacity: 0.75;
+  -webkit-transform-origin: 0px 100%;
+  transform-origin: 0px 100%;
+  -webkit-transform: scale(0.12);
+  transform: scale(0.12);
+  transition: all 0.75s;
+  background: #888888;
+}
+div.navpanel {
+  position: fixed;
+  overflow: hidden;
+  bottom: 0px;
+  width: 100%;
+  height: 128px;
+  z-index: 2;
+  transition: all 0.75s;
+  opacity: 0;
+  visibility: hidden;
+}
+
+/*li:before {
+  font-size: 48;
+  color: #bf9f46;
+}*/
+
+ul {                  /* Make top-level flush with left edge of title */
+  padding-left: 0px;
+  margin-left: 0px;
+  width: 100%;       /* Fix to give right margin */
+  margin-top: 0;
+}
+
+div.S ul {
+  margin-left: 32px;      /* Line up top bullets with title edge */
+}
+ul ul {
+  padding-left: 0px;
+  margin-left: 30px;
+  width: auto;
+  /*width: 890px;*/
+  /*padding-right: 30px;*/
+}
+/*ul ul ul {
+  padding-left: 0px;
+  margin-left: 30px;
+  width: 860px;       /* Shouldn't have to do this manually 
+}*/
+ul li {
+  list-style:none; /* if you’re not already using a reset */
+  font-size:1em; /* set the font-size of the bullet if necessary. Make sure to use em or %*/
+  text-indent:-1em;
+  padding-right:30px;
+  width: 100%;
+}
+
+ul li:before {
+  color:#305D7A;
+  content:"\2022"; /* /2022 is the numerical unicode for &bull; */
+  font-size:1.5em; /* set the font-size of the bullet if necessary. Make sure to use em or %*/
+  line-height:1em;
+  padding-right:.25em; /* give the bullet some padding from the text Make sure to use em*/
+  position:relative;
+    top:.1em; /* set the vertical position of the bullet if necessary. Make sure to use em or % */
+}
+
+.quoteinside {
+font-family: Georgia, serif;
+font-size: 28;
+font-style: italic;
+margin: 0.25em 0;
+padding: 0.25em 40px;
+line-height: 48px;
+display: inline-block;
+color: black;
+border-radius: 16px;
+border-bottom: 1pt solid #BF9F46;
+background: #F4E6BF;
+/*width:50%;*/
+}
+.quotebegin {
+display: inline-block;
+font-size: 120px;
+left: 0px;
+top: 30px;
+color: #C7AE65;
+width: 1px;
+vertical-align: top;
+position: relative;
+line-height: 48px;
+}
+.quoteend {
+position: relative;
+display: inline-block;
+font-size: 120px;
+line-height: 48px;
+left: -30px;
+top: 80px;
+color: #C7AE65;
+width: 1px;
+height: 1px;
+}
+
+div.bibitem {
+  background: #F4DD9B;
+  width: 100%;
+  border-radius: 0.25em;
+}
+
+div.bibitem table {
+  font-size: 24px;
+}
+
+table.allborders {
+  border-collapse: collapse;
+  margin: 0.25rem;
+}
+
+table.allborders td {
+  border: 1px solid black;
+  padding: 0.25rem;
+}
+
+tr.underrow td {
+  border-bottom: 1pt solid #BF9F46;
+}
+
+@font-face {
+    font-family: 'corbertregular';
+    src: url('Corbert-Regular-webfont.eot');
+    src: url('Corbert-Regular-webfont.eot?#iefix') format('embedded-opentype'),
+         url('Corbert-Regular-webfont.woff2') format('woff2'),
+         url('Corbert-Regular-webfont.woff') format('woff'),
+         url('Corbert-Regular-webfont.ttf') format('truetype'),
+         url('Corbert-Regular-webfont.svg#corbertregular') format('svg');
+    font-weight: 400;
+    font-style: normal;
+
+}
+
+@font-face {
+  font-family: 'sourcesans';
+  src: url('SourceSansPro-Regular.otf');
+}
+
+@font-face {
+  font-family: 'sourcecodepro';
+  src: url('SourceCodePro-Medium.otf');
+}
+
+@font-face {
+  font-family: 'Inconsolata';
+  src: url('Inconsolata-Regular.ttf');
+}
+
+body{
+font-family: 'sourcesans';
+      }
+
+div.Stitle {
+  background: #f4e6bf;
+  box-shadow: -5px 5px 10px 0px #aaaaaa;
+  margin: 20px 0px 20px 6px;
+  padding: 2px 2px 2px 2px;
+  /*opacity: .8;*/
+  z-index:2;
+}
+
+div.Slogo img {
+  width:95px; 
+  height:110px;
+  background: #305D7A;
+  right: 0px;
+  top: 0px;
+  opacity: 0.9;
+  z-index:5;
+  box-shadow: -5px 5px 10px 0px #aaaaaa;
+  position: absolute;
+  padding: 20px;
+}
+div.Stitle h1 {
+  font-family: 'corbertregular';
+  font-size: 40px;
+  margin: 8px;
+  font-weight:400;
+}
+
+
+div.slide  {    /* Slide always covers 1365x768px for fixed position layout within. Scaled to window */
+  width: 1093px; 
+  height: 768px; 
+  background: #ffffff;
+  position: relative;
+  padding: 0 136px 0 136px;
+  margin: 2px 2px;
+  border: 1px solid black;
+  font-size: 31.5px;
+  top: 0%;
+  display: inline-block;
+  vertical-align: top;
+}
+
+div.S  { 
+  width: 1156px;  /* 1292, but pad left, margin right */
+  height: 727px; 
+  background: #ffffff;
+  position: relative;
+  padding: 0;
+  padding-left: 136px;
+  margin: 2px 2px;
+  border: 1px solid black;
+  font-size: 31.5px;
+  top: 0%;
+  display: inline-block;
+  vertical-align: top;
+}
+div.Sin  {
+  width:  1020px;
+  height:  631px;
+  margin-right:136px;
+  position: relative;
+  top: -16px;
+  display: inline-block;
+}
+
+table {
+  font-size: 28px;
+}
+
+div.slide > ul {
+  margin-left: 32px;      /* Line up top bullets with title edge */
+  width: 1061px;          /* Why are constrained dimensions not internal? Why?? */
+}
+
