@@ -1,7 +1,10 @@
 ============================================
 Example presentation for slideskokaren
 ============================================
-
+:Author: Your Name In Lights
+:Date: Jan, Current Era.
+:CourseCode: CS101
+:CourseName: Stuff and Things
 
 Full Slide Image Aspect Square
 --------------------------------------------

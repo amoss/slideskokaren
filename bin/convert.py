@@ -45,24 +45,40 @@ if args.output is None:
   args.output = os.path.join(args.folder, "index.html")
 
 doc = parseRst(args.input)
-
-
-
+print "%d nodes under root" % len(doc.children)
 presentation = []
 counter = 1
 
-for slide in doc.children:
+def processDocTitle(node):
+  for c in node.children:
+    if   isinstance(c, docutils.nodes.title):
+      titles['Name'] = str(c.children[0])     # Assume a single Text node.
+    elif isinstance(c, docutils.nodes.field_list):
+      for f in c.children:
+        assert isinstance(f.children[0], docutils.nodes.field_name)  and  \
+               isinstance(f.children[1], docutils.nodes.field_body)
+        name = "".join([ str(x) for x in f.children[0].children ])
+        titles[ name ] = Slide.renderText(f.children[1].children[0])
+        
+    elif isinstance(c, docutils.nodes.section):
+      processSlide(c)
+    else:
+      print "Unexpected %s under document title:" % type(c)
+      print c
+
+def processSlide(slide):
+  global counter
   if not isinstance(slide, docutils.nodes.section):
     print "Unexpected node under root:", type(slide), slide
-    continue
+    return
   if not isinstance(slide.children[0], docutils.nodes.title):
     print "No title node under section node?!"
     print slide.children
-    continue
+    return
   titleNode = slide.children[0]
   if not isinstance(titleNode.children[0], docutils.nodes.Text):
     print "No text in the title node!"
-    continue
+    return
   title = titleNode.children[0]
 
   # Check for a hashtag template name.
@@ -113,6 +129,17 @@ for slide in doc.children:
   presentation.append(current)
 
 
+
+titles = {}
+# Using a document title changes the shape of the tree.
+if len(doc.children)==1 and isinstance(doc.children[0],docutils.nodes.section):
+  processDocTitle(doc.children[0])
+else:
+  for c in doc.children:
+    processSlide(c)
+
+
+
 with open(args.output, 'wt') as out:
   print >>out, '<html><head><title>%s</title>' % 'INSERT TITLE'
   print >>out, '<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>'
@@ -133,6 +160,18 @@ with open(args.output, 'wt') as out:
   });
   </script>'''
   print >>out, '<div id="slides">'
+  print >>out, '<div class="S">'
+  print >>out, '  <div class="Slogo"><img src="logo.svg"/></div>'
+  if 'CourseCode' in titles:
+    print >>out, '  <h1 style="margin:0; margin-top:0.5em">%s</h1>' % titles['CourseCode']
+  if 'CourseName' in titles:
+    print >>out, '  <h1 style="margin:0; margin-top:0.5em">%s</h1>' % titles['CourseName']
+  if 'Date' in titles:
+    print >>out, '  <p>%s</p>' % titles['Date']
+  if 'Name' in titles:
+    print >>out, '  <p>%s</p>' % titles['Name']
+  print >>out, '</div>'
+  print titles
   for s in presentation:
     s.render(out)
   print >>out, '</div>'
