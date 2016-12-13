@@ -1,3 +1,4 @@
+
 /*.primary-1 { background-color: #45718D }    Lighter
 .primary-2 { background-color: #44687F }      Normal
 .primary-3 { background-color: #305D7A }      Richer
@@ -25,6 +26,11 @@
 
 dt {
   color: #BF9F46;
+  float: left;
+  clear: left;
+}
+dd {
+  margin-left: 6em;
 }
 span.pattern {
   background: #bbbbdd;
@@ -92,8 +98,9 @@ div.ScalloHd {
   padding:    0.25em 1em;
   border-radius: 0.25em;
   line-height: 1.5;
-  font-family: "Lucida Console", Monaco, monospace;
+  font-family:   'Inconsolata';
   font-size: 24;
+  white-space: pre;
 }
 
 .verbatim {
@@ -161,7 +168,7 @@ div.thumb  {
   transform-origin: 0px 100%;
   -webkit-transform: scale(0.12);
   transform: scale(0.12);
-  transition: all 0.75s;
+  /*transition: all 0.75s;*/
   background: #888888;
 }
 div.navpanel {
@@ -181,15 +188,41 @@ div.navpanel {
   color: #bf9f46;
 }*/
 
+dl {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  margin-left: 0.75em;
+}
+
+ol {                  /* Make top-level flush with left edge of title */
+  padding-left: 0px;
+  margin-left: 1.1em;
+  -webkit-margin-start: 1.3em;
+  width: 100%;       /* Fix to give right margin */
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
 ul {                  /* Make top-level flush with left edge of title */
   padding-left: 0px;
   margin-left: 0px;
   width: 100%;       /* Fix to give right margin */
-  margin-top: 0;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
 }
 
-div.S ul {
-  margin-left: 32px;      /* Line up top bullets with title edge */
+p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+div.Sin43 ul {
+  margin-left: 1.1em;      /* Line up top bullets with title edge */
+  margin-top: 0;
+}
+div.Sin169 ul {
+  margin-left: 1.1em;      /* Line up top bullets with title edge */
+  margin-top: 0;
 }
 ul ul {
   padding-left: 0px;
@@ -207,15 +240,16 @@ ul li {
   list-style:none; /* if you’re not already using a reset */
   font-size:1em; /* set the font-size of the bullet if necessary. Make sure to use em or %*/
   text-indent:-1em;
-  padding-right:30px;
-  width: 100%;
+  width: 95%;
+}
+ol li {
+  width: 95%;
 }
 
 ul li:before {
   color:#305D7A;
   content:"\2022"; /* /2022 is the numerical unicode for &bull; */
   font-size:1.5em; /* set the font-size of the bullet if necessary. Make sure to use em or %*/
-  line-height:1em;
   padding-right:.25em; /* give the bullet some padding from the text Make sure to use em*/
   position:relative;
     top:.1em; /* set the vertical position of the bullet if necessary. Make sure to use em or % */
@@ -306,13 +340,16 @@ body{
 font-family: 'sourcesans';
       }
 
-div.Stitle {
+div.Stitle43, div.Stitle169 {
   background: #f4e6bf;
   box-shadow: -5px 5px 10px 0px #aaaaaa;
-  margin: 20px 0px 20px 6px;
+  margin: 20px 0px 20px 0px;
   padding: 2px 2px 2px 2px;
   /*opacity: .8;*/
   z-index:2;
+}
+div.Stitle43 {
+  margin-top:34px;
 }
 
 div.Slogo img {
@@ -327,7 +364,14 @@ div.Slogo img {
   position: absolute;
   padding: 20px;
 }
-div.Stitle h1 {
+div.Stitle169 h1 {
+  font-family: 'basic';
+  font-size: 40px;
+  color: #444444;
+  margin: 8px;
+  font-weight:400;
+}
+div.Stitle43 h1 {
   font-family: 'basic';
   font-size: 40px;
   color: #444444;
@@ -336,7 +380,8 @@ div.Stitle h1 {
 }
 
 
-div.slide  {    /* Slide always covers 1365x768px for fixed position layout within. Scaled to window */
+/* DELETE
+  div.slide  {  
   width: 1093px; 
   height: 768px; 
   background: #ffffff;
@@ -344,14 +389,19 @@ div.slide  {    /* Slide always covers 1365x768px for fixed position layout with
   padding: 0 136px 0 136px;
   margin: 2px 2px;
   border: 1px solid black;
-  font-size: 31.5px;
   top: 0%;
   display: inline-block;
   vertical-align: top;
-}
+} */
 
-div.S  { 
-  width: 1156px;  /* 1292, but pad left, margin right */
+/* 16/9 = 1.77      External frame is 1298/733
+    4/3 = 1.33      External frame is 1024/768
+    Inner frame is 1020/631 = 1.62
+    4:3 layout puts header vertically above inner to push to 1.33
+    16:9 layout uses logo to size horizontal margins to push to 1.77
+*/
+div.S169  { 
+  width: 1156px;  
   height: 727px; 
   background: #ffffff;
   position: relative;
@@ -359,18 +409,54 @@ div.S  {
   padding-left: 136px;
   margin: 2px 2px;
   border: 1px solid black;
-  font-size: 31.5px;
   top: 0%;
   display: inline-block;
   vertical-align: top;
+  transform: scale(1);
+  transform-origin: 0 0;
+  -webkit-transform: scale(1);
+  -webkit-transform-origin: 0 0;
+  z-index:1;
 }
-div.Sin  {
+div.S43  {
+  width: 1020px; 
+  height: 768px; 
+  background: #ffffff;
+  position: relative;
+  padding: 0 2px 0 2px;
+  margin: 2px 2px;
+  border: 1px solid black;
+  font-size: 31.5px;
+  top: 0%;
+  display: inline-block;
+  transform: scale(1);
+  transform-origin: 0 0;
+  -webkit-transform: scale(1);
+  -webkit-transform-origin: 0 0;
+  vertical-align: top;
+  z-index:1;
+}
+div.Sin43  {
   width:  1020px;
-  height:  631px;
+  height:  601px;
+  margin-top: 54px;
   margin-right:136px;
   position: relative;
   top: -16px;
   display: inline-block;
+  font-size: 35px;
+  line-height: 1.3em;
+}
+div.Sin169  {
+  width:  1020px;
+  height:  601px;
+  margin-top: 8px;
+  margin-right:136px;
+  position: relative;
+  top: -16px;
+  display: inline-block;
+  font-size: 35px;
+  line-height: 1.3em;
 }
 
 table {
@@ -382,3 +468,15 @@ div.slide > ul {
   width: 1061px;          /* Why are constrained dimensions not internal? Why?? */
 }
 
+div#navpanel {
+  position: absolute;
+  background: black;
+  left:0px;
+  top:0px;
+  bottom:0px;
+  width:128px;
+  padding:6px;
+  visibility: hidden;
+  opacity: 0.8;
+  z-index: 3;
+}

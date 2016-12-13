@@ -8,8 +8,9 @@ function syncThumbs()
   {
     if(i==currentSlide)
       slides[i].style.visibility = 'visible';
-    else
+    else  {
       slides[i].style.visibility = nav.style.visibility;
+    }
   }
 }
 
@@ -27,6 +28,11 @@ function makeCurrent(idx)
   console.log('Window ' + (winCenter-winSize) + ' .. ' + (winCenter+winSize));
 
   var start = winCenter-winSize, stop = winCenter+winSize;
+  if(nav.style.visibility=="hidden") {
+    start = idx;
+    stop  = idx;
+  }
+  
   /* Slides before the current window */
   for(var i=0; i<start; i++)
   {
@@ -91,31 +97,6 @@ function rescale(div, factor)
 }
 
 thumbs = [];
-function initSlides(name)
-{
-}
-
-function processUrl()
-{
-  if(window.location.hash=='#lecture1')
-    initSlides('lecture1');
-  if(window.location.hash=='#lecture2')
-    initSlides('lecture2');
-  if(window.location.hash=='#lecture3')
-    initSlides('lecture3');
-  if(window.location.hash=='#lecture4')
-    initSlides('lecture4');
-  if(window.location.hash=='#lecture4')
-    initSlides('lecture4');
-  if(window.location.hash=='#lecture5')
-    initSlides('lecture5');
-  if(window.location.hash=='#lecture6')
-    initSlides('lecture6');
-  if(window.location.hash=='#lecture7')
-    initSlides('lecture7');
-  if(window.location.hash=='#lecture8')
-    initSlides('lecture8');
-}
 
 function doResize()
 {
@@ -136,12 +117,16 @@ function settingsButton()
 {
   document.getElementById('navpanel').style.visibility = 'visible';
   syncThumbs();
+  for(var i=0; i<slides.length; i++)
+    slides[i].style.transition = "left 0.75s, top 0.75s, opacity 0.75";
 }
 
 function navcloseButton()
 {
   document.getElementById('navpanel').style.visibility = 'hidden';
   syncThumbs();
+  for(var i=0; i<slides.length; i++)
+    slides[i].style.transition = "left 0s, top 0s, opacity 0.75s";
 }
 
 function rightButton()
@@ -158,20 +143,31 @@ function leftButton()
 window.onresize = doResize;
 window.onload   = function() 
 { 
-  slides = document.getElementById('slides').childNodes;
+  if( !window.location.search.includes("style=slideshow") )
+    return;
+  slides = document.getElementsByClassName('S43');
   if( slides.length == 0) 
-    slides = document.getElementsByClassName('slide2');
+    slides = document.getElementsByClassName('S169');
   if(slides.length < numThumbs)
   {
     winSize = Math.floor(slides.length / 2 - 0.5);  // Doesn't work for 1-2 slides.
     numThumbs = winSize*2 + 1;
   }
+  for(var i=0; i<slides.length; i++)
+    slides[i].style.transition = "left 0s, top 0s, opacity 0.75s";
   nav = document.getElementById('navpanel')
+  nav.style.visibility = "hidden";
   currentSlide = 0;
   doResize(); 
   thumbScale  = 128.0 / slides[0].offsetWidth;
   thumbHeight = thumbScale * slides[0].offsetHeight + 4;
   makeCurrent(0);
+  syncThumbs();
   for(var i=0; i<slides.length; i++)
+  {
     slides[i].onclick = Function('event', 'makeCurrent('+i+')');
+    slides[i].style.position = "fixed";
+    slides[i].style.transition = "all 0.75s";
+  }
+  document.body.style.margin = "0 0 0 0";
 }
