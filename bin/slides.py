@@ -1,7 +1,8 @@
-import docutils.utils
-import subprocess, cgi
+import docutils.utils, traceback, subprocess, cgi
 from StringIO import StringIO
 
+# debugFlag is poked into namespace by external module
+# aspectRatio is poked into namespace by external module
 
 class Slide(object):
   templates = ("Cols", "Rows", "Single")
@@ -12,6 +13,7 @@ class Slide(object):
     self.title    = title
     self.texts = []
     self.images  = []
+    self.raw = ''
 
   def addText(self, node, parent=None):
     if parent is None:
@@ -28,6 +30,8 @@ class Slide(object):
       self.texts.append( ("quote",   node) )
     elif isinstance(node,   docutils.nodes.table):
       self.texts.append( ("table",   node) )
+    elif isinstance(parent,   docutils.nodes.definition_list):
+      self.texts.append( ("def",     node) )
     else:
       assert False, "Unrecognised text-parent: %s" % node
 
@@ -35,12 +39,21 @@ class Slide(object):
     assert isinstance(node, docutils.nodes.image)
     self.images.append( (node.get('uri'), aratio) )
 
-  def render(self, out):
-    print >>out, '<div class="S">'
-    print >>out, '  <div class="Stitle"><h1>%s</h1></div>' % self.title
+  def addRaw(self, rawHtml):
+    self.raw = rawHtml
+
+  def render(self, out, aspectRatio):
+    print >>out, '<div class="S%s">' % aspectRatio
+    print >>out, '  <div class="Stitle%s"><h1>%s</h1></div>' % (aspectRatio,self.title)
     print >>out, '  <div class="Slogo"><img src="logo.svg"/></div>'
-    print >>out, '  <div class="Sin">'
-    getattr(self, 'render'+self.template)(out)
+    print >>out, '  <div class="Sin%s">' % aspectRatio
+    try:
+      getattr(self, 'render'+self.template)(out)
+    except:
+      traceback.print_exc()
+      print "During processing of", self.title
+      for t in self.texts:
+        print "Text:", t
     print >>out, '  </div>'
     print >>out, '</div>'
     print >>out
@@ -57,6 +70,9 @@ class Slide(object):
     else:
       root = [node]
 
+    if debugFlag:
+      print "renderText:", root
+
     def conv(docNode):
       if isinstance(docNode, docutils.nodes.emphasis):
         return '<em>%s</em>' % docNode.children[0]
@@ -64,7 +80,6 @@ class Slide(object):
         return '<b>%s</b>'   % docNode.children[0]
       if isinstance(docNode, docutils.nodes.literal):
         style = docNode.attributes.get("style", "program")
-        print style, docNode.children
         return '<code class="%s">%s</code>' % (style, cgi.escape(docNode.children[0]))
       if isinstance(docNode, docutils.nodes.Text):
         return str(docNode)
@@ -80,10 +95,16 @@ class Slide(object):
     return "".join(result)
 
 
+  @staticmethod
+  def renderLiteral(node) :
+    style = node.attributes['classes']
+    if len(style)==0:  style = ['verbatim']
+    style = style[0]
+    return '<div class="%s">%s</div>' % (style, cgi.escape(str(node.children[0])))
 
 
   def renderTextsDiv(self, out):
-    tagName = { 'bulleted':'ul', 'numbered':'ol' }  # No "plain" or "callout"
+    tagName = { 'bulleted':'ul', 'numbered':'ol', 'def':'dl' }  # No "plain" or "callout"
     inList = [None]             # Alias to force sharing with inner-proc
 
     def enter(kind):
@@ -98,31 +119,33 @@ class Slide(object):
       enter(nkind)
       if   isinstance(node, docutils.nodes.list_item):
         print >>out, '<li>%s</li>' % Slide.renderText(node.children[0])
+      elif isinstance(node, docutils.nodes.definition_list_item):
+        print >>out, '<dt>%s</dt><dd>%s</dd>' % (Slide.renderText(node.children[0].children[0]), Slide.renderText(node.children[1].children[0]))
       elif isinstance(node, docutils.nodes.paragraph):
-        print >>out, '<p>%s</p>'   % Slide.renderText(node.children[0])
+        print >>out, '<p>%s</p>'   % Slide.renderText(node)
       elif isinstance(node, docutils.nodes.topic):
         assert isinstance(node.children[0], docutils.nodes.title)
         print >>out, '<div class="Scallo"><div class="ScalloHd">%s</div>%s</div>' % \
                      (Slide.renderText(node.children[0].children[0]), 
                       Slide.renderText(node.children[1]))
       elif isinstance(node, docutils.nodes.literal_block):
-        style = node.attributes['classes']
-        if len(style)==0:  style = ['verbatim']
-        style = style[0]
-        print style
-        print >>out, '<div class="%s">%s</div>' % (style, str(node.children[0]))
+        print >>out, Slide.renderLiteral(node)
 
       elif isinstance(node, docutils.nodes.block_quote):
         print >>out, '<div class="quotebegin">&#8220;</div>'
         print >>out, '<div class="quoteinside">%s</div>' % str(node.children[0])
         if len(node.children)>1  and  isinstance(node.children[-1], docutils.nodes.attribution):
           print >>out, '- %s' % str(node.children[-1])
-        print >>out, '<div class="quoteend">&#8221;</div>'
+        print >>out, '<div class="quoteend">&#8221;</div><br/>'
+        
 
       elif isinstance(node, docutils.nodes.table):
         filelike = StringIO()
         TableVisitor(node).visit(filelike)
         print >>out, filelike.getvalue()
+
+      elif isinstance(node, docutils.nodes.raw):
+        print >>out, node['rawtext']
 
       else:
         assert False, "Don't know how to render %s" % node
@@ -131,11 +154,19 @@ class Slide(object):
 
 
 
-  def renderImagesDiv(self, out):
+  def renderImagesDiv(self, out, constrainHeight=False):
     '''Use aspect-ratio to determine constraints.'''
     for img in self.images:
-      print img
-      print >>out, '<img src="%s" style="width:100%%; height:100%%; object-fit:contain"/>' % img[0]
+      if isinstance(img,tuple)  and  isinstance(img[0],str)  and constrainHeight:
+        print >>out, '<img src="%s" style="width:100%%; max-height:100%%; object-fit:contain"/>' % img[0]
+      elif isinstance(img,tuple)  and  isinstance(img[0],str)  and not constrainHeight:
+        print >>out, '<img src="%s" style="width:100%%; height:100%%; object-fit:contain"/>' % img[0]
+      elif isinstance(img, docutils.nodes.literal_block):
+        print >>out, Slide.renderLiteral(img)
+      elif isinstance(img, docutils.nodes.raw):
+        print >>out, img['rawtext']
+      else:
+        assert False, "Don't know how to render %s in the image column" % type(img)
 
 
   def renderSingle(self, out):
@@ -144,16 +175,22 @@ class Slide(object):
     elif len(self.texts)>0   and len(self.images)==0:
       self.renderTextsDiv(out)
     elif len(self.texts)==0  and len(self.images)==0:
-      print "Blank"
+      print >>out, self.raw
     else:
       assert False, 'Slide template is single, but has both text and images'
 
   def renderCols(self, out):
+    if len(self.images)==0:
+      for x in self.texts[:] :
+        if (x[0] == "verbatim"  and  isinstance(x[1], docutils.nodes.literal_block)) or \
+           (isinstance(x[1], docutils.nodes.raw)) :
+          self.texts.remove(x)
+          self.images.append(x[1])
     print >>out, '  <div style="width:49%; display:inline-block; vertical-align:top">'
     self.renderTextsDiv(out)
     print >>out, '  </div>'
     print >>out, '  <div style="width:49%; display:inline-block; margin-left:1%">'
-    self.renderImagesDiv(out)
+    self.renderImagesDiv(out, constrainHeight=False)
     print >>out, '  </div>'
 
   def renderRows(self, out):
@@ -161,7 +198,7 @@ class Slide(object):
     self.renderTextsDiv(out)
     print >>out, '  </div>'
     print >>out, '  <div style="width:100%; display:inline-block">'
-    self.renderImagesDiv(out)
+    self.renderImagesDiv(out, constrainHeight=True)
     print >>out, '  </div>'
 
 

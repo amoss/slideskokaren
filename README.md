@@ -8,7 +8,7 @@ cloned from the course materials on http://mechani.se
 
 ## The example
 
-For a quick demo `bin/convert.py -f example -j -s`. The source in 
+For a quick demo `bin/convert.py example/slides.rst example/`. The source in 
 the examples folder is augmented with slides.html and the
 support files necessary. The folder can simply be copied onto
 a server that simply exports part of the file-system (e.g.
