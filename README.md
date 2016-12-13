@@ -14,6 +14,9 @@ support files necessary. The folder can simply be copied onto
 a server that simply exports part of the file-system (e.g.
 Apache). Examples of use within twisted will follow later.
 
+To switch from all-slides to the javascript slideshow pass style=slideshow
+to the page: e.g. index-43.html?style=slideshow.
+
 ## Dependencies
 
 The only dependency should be docutils for the RST parser. Install
